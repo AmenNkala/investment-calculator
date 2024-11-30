@@ -1,7 +1,10 @@
 import { useState } from "react";
+
 import Header from "./components/Header";
 import UserInput from "./components/UserInput";
-import { calculateInvestmentResults } from "./util/investment";
+import Table from "./components/Table";
+
+import { calculateInvestmentResults, formatter } from "./util/investment";
 
 const INPUT_VALUES = {
   "initial investment": 0,
@@ -19,9 +22,31 @@ const INPUT_LABELS = {
 
 function App() {
   const [inputValues, setInputValues] = useState(INPUT_VALUES);
+  const [tableData, setTableData] = useState([]);
 
   function handleUserInputValue(input, value) {
-    setInputValues({ ...inputValues, [input]: value });
+    const newInputValues = { ...inputValues, [input]: value };
+    setInputValues(newInputValues);
+    updateTableData(newInputValues);
+  }
+
+  function updateTableData(newValues) {
+    const result = Object.entries(INPUT_LABELS).reduce((acc, [key, value]) => {
+      acc[key] = Number(newValues[value]);
+      return acc;
+    }, {});
+    const investmentResults = calculateInvestmentResults(result).map(
+      (investment) => {
+        return {
+          year: investment.year,
+          interest: formatter.format(investment.interest),
+          valueEndOfYear: formatter.format(investment.valueEndOfYear),
+          annualInvestment: formatter.format(investment.annualInvestment),
+        };
+      }
+    );
+
+    setTableData(investmentResults);
   }
   return (
     <>
@@ -48,6 +73,7 @@ function App() {
           />
         </div>
       </div>
+      <Table data={tableData} />
     </>
   );
 }
