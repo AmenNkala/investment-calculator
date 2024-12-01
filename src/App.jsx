@@ -48,6 +48,9 @@ function App() {
 
     setTableData(investmentResults);
   }
+
+  const isDurationValid = tableData.length > 0 && inputValues.duration > 0;
+
   return (
     <>
       <Header />
@@ -55,25 +58,35 @@ function App() {
         <div className='input-group'>
           <UserInput
             inputLabel={INPUT_LABELS.initialInvestment}
+            inputValue={inputValues["initial investment"]}
             onChangeValue={handleUserInputValue}
           />
           <UserInput
             inputLabel={INPUT_LABELS.annualInvestment}
+            inputValue={inputValues["annual investment"]}
             onChangeValue={handleUserInputValue}
           />
         </div>
         <div className='input-group'>
           <UserInput
             inputLabel={INPUT_LABELS.expectedReturn}
+            inputValue={inputValues["expected return"]}
             onChangeValue={handleUserInputValue}
           />
           <UserInput
             inputLabel={INPUT_LABELS.duration}
+            inputValue={inputValues.duration}
             onChangeValue={handleUserInputValue}
           />
         </div>
       </div>
-      <Table data={tableData} />
+      {!isDurationValid && (
+        <p className='center'>
+          No data available. Please fill out the inputs.{" "}
+          <strong>Duration should be valid!</strong>
+        </p>
+      )}
+      {isDurationValid && <Table data={tableData} />}
     </>
   );
 }

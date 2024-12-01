@@ -1,11 +1,6 @@
 import { useState } from "react";
 
-export default function UserInput({ inputLabel, onChangeValue }) {
-  const [inputValue, setInputValue] = useState(0);
-  function handleChange($event) {
-    setInputValue($event.target.value);
-    onChangeValue(inputLabel, $event.target.value);
-  }
+export default function UserInput({ inputLabel, inputValue, onChangeValue }) {
   return (
     <p id='user-input'>
       <label htmlFor={inputLabel}>{inputLabel}</label>
@@ -13,7 +8,11 @@ export default function UserInput({ inputLabel, onChangeValue }) {
         type='number'
         name={inputLabel}
         value={inputValue}
-        onChange={handleChange}
+        onChange={($event) => {
+          onChangeValue(inputLabel, $event.target.value);
+        }}
+        required
+        min={1}
       />
     </p>
   );
