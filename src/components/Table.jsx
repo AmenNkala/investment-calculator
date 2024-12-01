@@ -1,10 +1,4 @@
 export default function Table({ data }) {
-  if (data.length === 0) {
-    return (
-      <p className='center'>No data available. Please fill out the inputs.</p>
-    );
-  }
-
   return (
     <table id='result'>
       <thead>
